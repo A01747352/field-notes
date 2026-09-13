@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    name: Lint & build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm run lint
+      - run: npm run build
+
+  db:
+    name: Database migrations
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: supabase/setup-cli@v1
+        with:
+          # Pinned, not "latest": avoids both CI flakiness (GitHub API
+          # rate limits resolving the newest release) and drift from
+          # the version in package.json's devDependencies.
+          version: 2.117.0
+
+      # `supabase start` applies every file in supabase/migrations to a
+      # fresh Postgres instance, so this fails the same way a broken
+      # migration would fail for anyone running `npm run db:start`.
+      - run: supabase start
+      - run: supabase stop
