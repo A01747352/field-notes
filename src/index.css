@@ -1,0 +1,12 @@
+/*
+ * Placeholder reset. Real design tokens (B&W system, type scale,
+ * dynamic accent color) land in chore/tailwind-design-tokens.
+ */
+:root {
+  color-scheme: light dark;
+  font-family: system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+}
