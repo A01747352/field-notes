@@ -81,3 +81,7 @@ supabase/
 We follow a small GitHub Flow: no direct commits to `main`, one branch per feature/fix/chore,
 Conventional Commits, and small focused PRs. Full details in
 [`docs/github-workflow.md`](docs/github-workflow.md).
+
+Every PR runs [`.github/workflows/ci.yml`](.github/workflows/ci.yml): format check, lint,
+and build, plus a job that boots a fresh local Supabase stack to confirm
+`supabase/migrations/` still applies cleanly.
