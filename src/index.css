@@ -1,12 +1,56 @@
+@import 'tailwindcss';
+
+/* Instrument Serif — display/titles. Inter Variable — UI/body.
+   IBM Plex Mono — metadata (dates, coordinates, catalog IDs). */
+@import '@fontsource/instrument-serif/latin.css';
+@import '@fontsource-variable/inter/index.css';
+@import '@fontsource/ibm-plex-mono/latin.css';
+
 /*
- * Placeholder reset. Real design tokens (B&W system, type scale,
- * dynamic accent color) land in chore/tailwind-design-tokens.
+ * Field Notes design tokens (docs/design.md, section 6).
+ *
+ * Hard rule: the interface itself is pure black & white. The only
+ * color allowed comes from note content (a photo or an album cover),
+ * extracted at runtime and applied as `--accent` on that note's
+ * markup — never hardcoded here, and never used for chrome (nav,
+ * buttons, generic UI text). See feat/dynamic-accent-color.
  */
+@theme inline {
+  --font-display: 'Instrument Serif', ui-serif, Georgia, serif;
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-line: var(--line);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+}
+
 :root {
+  --paper: #fafafa;
+  --ink: #111111;
+  --line: #e5e5e5;
+  --muted: #6b6b6b;
+  /* Per-note accent, set inline by content that has a photo or a
+     song. Defaults to the ink color so it's a no-op until then. */
+  --accent: var(--ink);
+
   color-scheme: light dark;
-  font-family: system-ui, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #0a0a0a;
+    --ink: #fafafa;
+    --line: #262626;
+    --muted: #a3a3a3;
+  }
 }
 
 body {
   margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
 }
