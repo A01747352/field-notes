@@ -25,16 +25,41 @@ cp .env.example .env   # fill in your own keys
 npm run dev
 ```
 
+### Database (Supabase)
+
+The schema lives as SQL migrations in `supabase/migrations/`, not clicked together
+in a dashboard. To work on it locally (needs [Docker](https://docs.docker.com/get-docker/)):
+
+```bash
+npm run db:start   # boots local Postgres + Supabase stack, applies migrations
+npm run db:stop    # shuts it down
+```
+
+`db:start` prints a local `API_URL` and `anon key` — put those in `.env` as
+`VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` to develop against the local database
+instead of a hosted project. Studio (a GUI for the local DB) is at
+`http://127.0.0.1:54323`.
+
+To change the schema: add a new file with `npx supabase migration new <name>`, write
+plain SQL, then `npm run db:reset` to rebuild the local database from all migrations
+and confirm it applies cleanly. Never hand-edit an already-committed migration —
+add a new one. `npm run db:types` regenerates `src/types/database.ts` from the local
+schema after a migration.
+
 ## Scripts
 
-| Command                | Does                                 |
-| ---------------------- | ------------------------------------ |
-| `npm run dev`          | Start the local dev server           |
-| `npm run build`        | Type-check and build for production  |
-| `npm run lint`         | Lint with oxlint                     |
-| `npm run format`       | Format the codebase with Prettier    |
-| `npm run format:check` | Check formatting without writing     |
-| `npm run preview`      | Preview the production build locally |
+| Command                | Does                                                  |
+| ---------------------- | ----------------------------------------------------- |
+| `npm run dev`          | Start the local dev server                            |
+| `npm run build`        | Type-check and build for production                   |
+| `npm run lint`         | Lint with oxlint                                      |
+| `npm run format`       | Format the codebase with Prettier                     |
+| `npm run format:check` | Check formatting without writing                      |
+| `npm run preview`      | Preview the production build locally                  |
+| `npm run db:start`     | Start the local Supabase stack                        |
+| `npm run db:stop`      | Stop the local Supabase stack                         |
+| `npm run db:reset`     | Rebuild the local database from `supabase/migrations` |
+| `npm run db:types`     | Regenerate `src/types/database.ts` from the schema    |
 
 ## Project structure
 
@@ -44,7 +69,11 @@ src/
 ├── pages/        # route-level screens
 ├── lib/          # external clients (supabase, spotify, weather, mapbox)
 ├── hooks/        # shared React hooks
-└── types/        # shared TypeScript types
+└── types/        # shared TypeScript types (database.ts is generated, see above)
+
+supabase/
+├── config.toml     # local dev stack config
+└── migrations/     # SQL schema history, applied in order
 ```
 
 ## Working on this repo
