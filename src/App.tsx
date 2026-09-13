@@ -1,4 +1,12 @@
+import { AuthScreen } from './components/AuthScreen'
+import { useSession } from './hooks/useSession'
+
 function App() {
+  const { session, isLoading } = useSession()
+
+  if (isLoading) return null
+  if (!session) return <AuthScreen />
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-3 bg-paper px-6 text-center text-ink">
       <h1 className="font-display text-5xl">Field Notes</h1>
