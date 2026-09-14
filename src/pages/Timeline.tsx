@@ -72,7 +72,7 @@ export function Timeline() {
   const activeGroup = groups.find((group) => group.key === activeGroupKey) ?? groups[0]
 
   return (
-    <div className="min-h-screen bg-paper text-ink">
+    <div className="min-h-screen bg-paper pb-20 text-ink">
       <header className="sticky top-0 z-10 flex items-baseline justify-between border-b border-line bg-paper px-4 py-3">
         <span className="font-mono text-xs">FIELD NOTES</span>
         {activeGroup && (
